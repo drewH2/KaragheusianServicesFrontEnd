@@ -1,0 +1,17 @@
+{
+  "name": "karagheusian-services",
+  "version": "0.0.0",
+  "description": "KaragheusianServices",
+  "main": "app.js",
+  "author": {
+    "name": ""
+  },
+  "devDependencies": {
+    "eslint": "^8.21.0"
+  },
+  "eslintConfig": {},
+  "dependencies": {
+    "electron": "^35.0.2",
+    "socket.io-client": "^4.8.1"
+  }
+}
