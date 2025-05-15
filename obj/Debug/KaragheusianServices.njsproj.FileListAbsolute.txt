@@ -1,0 +1,3 @@
+C:\Users\sqlserver\source\repos\KaragheusianServices\obj\Debug\KaragheusianServices.njsproj.AssemblyReference.cache
+C:\Users\sqlserver\source\repos\KaragheusianServices\obj\Debug\KaragheusianServices.njsproj.CoreCompileInputs.cache
+C:\Users\sqlserver\source\repos\KaragheusianServices\bin\Microsoft.NodejsTools.WebRole.dll

@@ -12,6 +12,7 @@
   "eslintConfig": {},
   "dependencies": {
     "electron": "^35.0.2",
+    "libphonenumber-js": "^1.12.6",
     "socket.io-client": "^4.8.1"
   }
 }

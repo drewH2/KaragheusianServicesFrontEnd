@@ -2,6 +2,13 @@ console.log('hii from preloaddd');
 
 const { contextBridge, ipcRenderer } = require('electron');
 const io = require('socket.io-client');
+const { parsePhoneNumberFromString} = require('libphonenumber-js');
+
+console.log('from preload phone: ', parsePhoneNumberFromString)
+//console.log('from preload phone: ', isValidNumber)
+const phoneNumber = parsePhoneNumberFromString('+96171123456');
+console.log('phone from preload: ',phoneNumber)
+
 //const { jsPDF } = require('jspdf');
 //require('jspdf-autotable');
 //const crypto = require('crypto');
@@ -30,6 +37,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     emit: (event, data) => socket.emit(event, data),
     disconnect: () => socket.disconnect(),
     connect: () => socket.connect(),
+    validatePhone: (number) => {
+        const phoneNumber = parsePhoneNumberFromString(number);
+        return phoneNumber ? phoneNumber.isValid() : false;
+    }
 
     // PDF Functions
    // jsPDF: jsPDF,

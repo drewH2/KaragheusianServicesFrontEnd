@@ -108,19 +108,43 @@ function messageBox(event, message, detail,confirmRoute) {
     });
 }
 
+function showConfMessage(message, detail) {
+    const options = {
+        type: 'info',
+        buttons: ['OK'],
+        title: 'Information',
+        message: message,
+        detail: detail
+    };
+
+    dialog.showMessageBox(null, options, (response) => {
+        if (response === 0) {
+            console.log('User clicked OK');
+        }
+    });
+
+};
+
 function ErrorBox(titleError, stringError) {
 
     dialog.showErrorBox(titleError, stringError);
 
 };
 
-ipc.on('messageBox', function (event, title, desc, confirmRoute) {
+ipc.on('showConfmessageBox', function (event, title, desc, confirmRoute) {
 
 
     messageBox(event, title, desc, confirmRoute);
 
 
 });
+
+ipc.on('messageBox', function (event,message, desc) {
+
+
+    showConfMessage(message,desc)
+
+})
 
 ipc.on('errorBox', function (event, title, errorDesc) {
 
