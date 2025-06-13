@@ -25,13 +25,15 @@ const socket = io('http://192.168.40.38:3050');
 
 // Expose safe functions to the renderer process
 contextBridge.exposeInMainWorld('electronAPI', {
-    send: (event, message, message2) => ipcRenderer.send(event, message, message2),
+    send: (event, message, message2,message3) => ipcRenderer.send(event, message, message2,message3),
     on: (event, callback) => ipcRenderer.on(event, (_event, data) => callback(data)),
     once: (event, callback) => ipcRenderer.once(event, (_event, data) => callback(data)),
+    removeAllListeners: (event) => ipcRenderer.removeAllListeners(event), // <-- Add this line
     // WebSocket methods
     sockOn: (event, callback) => socket.on(event, callback),
     sockOnce: (event, callback) => socket.once(event, callback),
     sockOff: (event) => socket.off(event),
+    
     removeAllSockListeners: (event) => socket.removeAllListeners(event), // <-- Add this
     listeners: (event) => socket.listeners(event), // <-- Added this
     emit: (event, data) => socket.emit(event, data),

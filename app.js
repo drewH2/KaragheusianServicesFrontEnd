@@ -86,6 +86,7 @@ function createWindow() {
 }
 
 function messageBox(event, message, detail,confirmRoute) {
+   
     const options = {
         type: 'info',
         buttons: ['YES', 'NO'], // 'YES' is at index 0, 'NO' is at index 1
@@ -132,8 +133,10 @@ function ErrorBox(titleError, stringError) {
 };
 
 ipc.on('showConfmessageBox', function (event, title, desc, confirmRoute) {
-
-
+console.log('confirmRoute',confirmRoute)
+    console.log('title',title)
+    console.log('desc',desc)    
+    console.log('event',event)
     messageBox(event, title, desc, confirmRoute);
 
 
