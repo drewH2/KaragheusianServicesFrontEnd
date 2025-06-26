@@ -4,7 +4,7 @@ const BrowserWindow = electron.BrowserWindow;
 const globalShortcut = electron.globalShortcut;
 const path = require("path");
 const url = require("url");
-
+const XLSX = require('xlsx');
 const ipc = electron.ipcMain;
 const dialog = electron.dialog;
 const Menu = electron.Menu
@@ -84,6 +84,22 @@ function createWindow() {
 
 
 }
+function showExportMessage() {
+    const options = {
+        type: 'info',
+        buttons: ['OK'],
+        title: 'Information',
+        message: 'Successful',
+        detail: 'Added Successfully'
+    };
+
+    dialog.showMessageBox(null, options, (response) => {
+        if (response === 0) {
+            console.log('User clicked OK');
+        }
+    });
+
+};
 
 function messageBox(event, message, detail,confirmRoute) {
    
@@ -155,6 +171,68 @@ ipc.on('errorBox', function (event, title, errorDesc) {
     ErrorBox(title, errorDesc);
 
 });
+ipc.on('export-window', function (event, data) {
+
+    try {
+
+
+        for (const result of data) {
+
+            const newDate = new Date(result.serviceDate);
+            result.serviceDate = newDate;
+           
+
+        }
+        for (const result of data) {
+            const newDate = new Date(result.receipt_date);
+            result.receipt_date = newDate;
+        }
+     //   const processedResults = processResults(data);
+        // Create a worksheet
+        const todayDate = new Date();
+        const todayFormat = formatDate(todayDate)
+        const ws = XLSX.utils.json_to_sheet(data);
+
+        // Create a workbook with the worksheet
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+
+        // Export the workbook to a file
+        dialog.showSaveDialog({
+            defaultPath: `exported_services-${todayFormat}.xlsx`, // Default file name
+            filters: [
+                { name: 'Excel Files', extensions: ['xlsx'] }, // Filter to show only Excel files
+            ],
+        }).then((result) => {
+            if (!result.canceled) {
+                const filePath = result.filePath;
+
+                // Write the workbook to the specified file path
+                XLSX.writeFile(wb, filePath);
+
+                showExportMessage();
+            }
+        }).catch((error) => {
+            console.error(error);
+            dialog.showErrorBox('Error', 'Error Exporting Data');
+        });
+
+
+    } catch (error) {
+        console.error(error);
+        dialog.showErrorBox('Error', 'Error Exporting Data');
+
+
+    }
+
+});
+function formatDate(date) {
+    const day = String(date.getDate()).padStart(2, '0'); // Get day and pad with leading zero if needed
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Get month (0-indexed, hence +1) and pad with leading zero
+    const year = date.getFullYear(); // Get full year
+
+    return `${year}-${month}-${day}`; // Return the formatted date
+}
 
 app.on('ready', function () {
     createWindow();
